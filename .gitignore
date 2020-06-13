@@ -1,0 +1,9 @@
+.DS_Store
+tempCodeRunnerFile.py
+test.*
+
+
+.vscode/*
+.history/*
+.idea/*
+__pycache__/*
