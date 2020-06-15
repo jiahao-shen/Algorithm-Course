@@ -65,6 +65,7 @@ def train():
     for e in trange(episode):
         state = env.reset()
         score = 0
+        loss = np.array([0])
 
         for _ in range(1000):
             action = agent.act(state)
@@ -75,12 +76,12 @@ def train():
 
             state = new_state
             score += reward
+            loss = np.append(loss, agent.loss)
 
             if done:
                 break
 
-        print('Episode:', e, '/', episode, ', value:', agent.epsilon,
-              ', score:', score, file=open('logs/maze.log'))
+        print(score, ',', np.average(loss), file=open('logs/maze', 'a'))
 
         agent.save('models/maze.h5')
 

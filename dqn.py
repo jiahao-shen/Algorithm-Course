@@ -16,6 +16,7 @@ class DQN(object):
         self.state_size = state_size
         self.action_size = action_size
 
+        self.loss = 0
         self.memory = deque(maxlen=2000)
 
         self.gamma = 0.95
@@ -54,14 +55,22 @@ class DQN(object):
 
         minibatch = random.sample(self.memory, batch_size)
 
-        for state, action, reward, new_state, done in minibatch:
+        train_x = np.zeros((batch_size, self.state_size))
+        train_y = np.zeros((batch_size, self.action_size))
+
+        for i, (state, action, reward, new_state, done) in enumerate(minibatch):
             target = self.target_model.predict(state)
             target[0][action] = reward
+
             if not done:
                 target[0][action] += self.gamma * \
                     np.amax(self.target_model.predict(new_state)[0])
-
-            self.model.fit(state, target, epochs=1, verbose=0)
+            
+            train_x[i] = state[0]
+            train_y[i] = target[0]
+        
+        callback = self.model.fit(train_x, train_y, epochs=1, verbose=0)
+        self.loss = callback.history['loss']
 
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay

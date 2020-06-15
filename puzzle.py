@@ -122,6 +122,7 @@ def train():
     for e in trange(episode):
         state = env.reset()
         score = 0
+        loss = np.array([])
 
         for _ in range(1000):
             action = agent.act(state)
@@ -132,12 +133,12 @@ def train():
 
             state = new_state
             score += reward
+            loss = np.append(loss, agent.loss)
 
             if done:
                 break
 
-        print('Episode:', e, '/', episode, ', value:', agent.epsilon,
-              ', score:', score, file=open('logs/puzzle.log', 'a'))
+        print(score, ',', np.average(loss), file=open('logs/puzzle', 'a'))
 
         agent.save('models/puzzle.h5')
 
