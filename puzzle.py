@@ -119,11 +119,11 @@ def train():
     episode = 1000
     batch_size = 16
 
-    for e in range(episode):
+    for e in trange(episode):
         state = env.reset()
         score = 0
 
-        for _ in trange(1000):
+        for _ in range(1000):
             action = agent.act(state)
             new_state, reward, done = env.step(action)
 
