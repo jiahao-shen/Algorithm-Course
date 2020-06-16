@@ -83,7 +83,7 @@ def train():
 
         print(score, ',', np.average(loss), file=open('logs/maze', 'a'))
 
-        agent.save('models/maze.h5')
+        agent.save('model/maze.h5')
 
 
 def main():

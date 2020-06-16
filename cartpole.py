@@ -16,7 +16,6 @@ def train():
         loss = np.array([0])
 
         while True:
-            env.render()
             action = agent.act(state)
             new_state, reward, done, info = env.step(action)
             new_state = np.reshape(new_state, (1, 4))
@@ -33,7 +32,7 @@ def train():
 
         print(score, ',', np.average(loss), file=open('logs/cartpole', 'a'))
 
-        agent.save('models/cartpole.h5')
+        agent.save('model/cartpole.h5')
     
     env.close()
 
