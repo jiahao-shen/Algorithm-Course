@@ -4,7 +4,7 @@ from time import time
 from keras.optimizers import Adam
 from keras.models import Sequential
 from keras.callbacks import TensorBoard
-from keras.layers import Dense, Activation, Flatten
+from keras.layers import Dense, Flatten
 from rl.agents.dqn import DQNAgent
 from rl.policy import BoltzmannQPolicy
 from rl.memory import SequentialMemory

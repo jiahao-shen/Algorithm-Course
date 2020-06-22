@@ -24,15 +24,12 @@ class DQN(object):
         self.epsilon_decay = 0.995
         self.learning_rate = 0.001
 
-        # self.predict_model = self._build_model()
-        # self.target_model = self._build_model()
         self.model = self._build_model()
 
     def _build_model(self):
         model = Sequential()
 
         model.add(Dense(units=16, input_dim=self.state_size, activation='relu'))
-        model.add(Dense(units=16, activation='relu'))
         model.add(Dense(units=16, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
 
@@ -43,7 +40,6 @@ class DQN(object):
     def act(self, state):
         if random.random() < self.epsilon:
             return random.randrange(self.action_size)
-        # return np.argmax(self.predict_model.predict(state)[0])
         return np.argmax(self.model.predict(state)[0])
 
     def memorize(self, state, action, reward, new_state, done):
@@ -56,30 +52,23 @@ class DQN(object):
         minibatch = random.sample(self.memory, batch_size)
 
         for state, action, reward, new_state, done in minibatch:
-            # target = self.target_model.predict(state)
             target = self.model.predict(state)
             target[0][action] = reward
 
             if not done:
-                # target[0][action] += self.gamma * \
-                    # np.amax(self.target_model.predict(new_state)[0])
                 target[0][action] += self.gamma * \
                     np.amax(self.model.predict(new_state)[0])
 
-            # self.predict_model.fit(state, target, epochs=1, verbose=0)
             self.model.fit(state, target, epochs=1, verbose=0)
 
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
 
-        # self.target_model.set_weights(self.predict_model.get_weights())
 
     def load(self, file):
-        # self.predict_model.load_weights(file)
         self.model.load_weights(file)
 
     def save(self, file):
-        # self.predict_model.save_weights(file)
         self.model.save_weights(file)
 
 
@@ -88,7 +77,7 @@ def train():
     agent = DQN(4, 2)
 
     episode = 1000
-    batch_size = 16
+    batch_size = 32
 
     for e in trange(episode):
         state = env.reset().reshape((1, 4))
@@ -116,6 +105,7 @@ def train():
 
 
 def draw():
+    plt.figure(figsize=(8, 4))
     plt.title('CartPole')
 
     y = []
@@ -143,5 +133,5 @@ def smooth(data, weight=0.99):
 
 
 if __name__ == '__main__':
-    # train()
-    draw()
+    train()
+    # draw()
