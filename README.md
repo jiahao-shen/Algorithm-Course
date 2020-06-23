@@ -1,3 +1,7 @@
-# Algorithm Project
+# Algorithm Course
 
-- 算法课大作业
+- 使用DQN实现CartPole
+- 使用DQN及其改进算法求解迷宫
+- 使用DQN及其改进算法求解NPuzzle
+
+
